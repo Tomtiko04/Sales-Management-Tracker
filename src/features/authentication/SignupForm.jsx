@@ -1,14 +1,14 @@
-import {  useEffect, useState } from "react";
+import {  useState } from "react";
 import { useSignup } from "./useSignup";
-import useGoogle from "./useGoogle";
-import useRoles from "../../context/useRoles";
-import useSubDistributors from "../../context/useSubDistributors";
+// import useGoogle from "./useGoogle";
+// import useRoles from "../../context/useRoles";
+// import useSubDistributors from "../../context/useSubDistributors";
 
 export default function SignupForm() {
 	const { signup, isSignup } = useSignup();
-	const { isLoginGoogle, isLogingGoogle } = useGoogle();
-	const {roleData} = useRoles();
-	const {subList} = useSubDistributors();
+	// const { isLoginGoogle, isLogingGoogle } = useGoogle();
+	// const {roleData} = useRoles();
+	// const {subList} = useSubDistributors();
 
 
 	const [name, setName] = useState("");
@@ -18,33 +18,48 @@ export default function SignupForm() {
 	const [contact, setContact] = useState("");
 	const [type, setTypes] = useState("");
 	const [distributor, setDistributor] = useState("");
-	const [avaliableRoles, setAvaliableRoles] = useState([]);
-	const [avaliableSubDistributors, setAvaliableSubDistributors] = useState([]);
+	const [isAdmin, setIsAdmin] = useState(false);
+	// const [avaliableRoles, setAvaliableRoles] = useState([]);
+	// const [avaliableRoles] = useState([]);
+	// const [avaliableSubDistributors, setAvaliableSubDistributors] = useState([]);
+	// const [avaliableSubDistributors ] = useState([]);
 	const [distributorId, setDistributorId] = useState('KURU00');
 
 	function handleSbmit(e) {
 		e.preventDefault();
-		signup({ name, contact, type, distributor, distributorId, userName, email, password });
-	}
+		signup({ name, contact, type, distributor, distributorId, userName, isAdmin, email, password }, {
+			onSettled: () => {
+				setName("");
+				setUserName("");
+				setPassword("");
+				setEmail("");
+				setContact("");
+				setTypes("");
+				setDistributor("");
+				setIsAdmin(false);
 
-	function handleGoogle() {
-		isLoginGoogle();
-	}
-
-	useEffect(function(){
-		if(roleData){
-			setAvaliableRoles(roleData)
-		}
-	}, [roleData])
-
-	useEffect(
-		function () {
-			if (subList) {
-				setAvaliableSubDistributors(subList);
 			}
-		},
-		[subList]
-	);
+		});
+	}
+
+	// function handleGoogle() {
+	// 	isLoginGoogle();
+	// }
+
+	// useEffect(function(){
+	// 	if(roleData){
+	// 		setAvaliableRoles(roleData)
+	// 	}
+	// }, [roleData])
+
+	// useEffect(
+	// 	function () {
+	// 		if (subList) {
+	// 			setAvaliableSubDistributors(subList);
+	// 		}
+	// 	},
+	// 	[subList]
+	// );
 
 	return (
 		<div>
@@ -71,11 +86,14 @@ export default function SignupForm() {
 				<label>Role:</label>
 				<select value={type} onChange={(e) => setTypes(e.target.value)}>
 					<option value="">Please choose an option</option>
-					{avaliableRoles.map((roles) => (
+					{/* {avaliableRoles.map((roles) => (
 						<option key={roles.id} value={roles.role}>
 							{roles.name}
 						</option>
-					))}
+					))} */}
+					<option value="sales-rep">Sales Representative</option>
+					<option value="sub-distributor">Sub Distributor</option>
+					<option value="admin">Admin</option>
 				</select>
 
 				<br />
@@ -96,19 +114,30 @@ export default function SignupForm() {
 						<label>Associated Sub-Distributor:</label>
 						<select value={distributor} onChange={(e) => setDistributor(e.target.value)}>
 							<option value="">Please choose an option</option>
-							{avaliableSubDistributors.map((sublist)=> <option key={subList.id}>{sublist.name}</option>)}
+							<option value="shade">Shade</option>
+							{/* {avaliableSubDistributors.map((sublist)=> <option key={subList.id}>{sublist.name}</option>)} */}
 						</select>
 					</>
 				)}
 
+				{type === "admin" && (
+					<>
+						<label>
+							<input type="checkbox" value={isAdmin} onChange={() => setIsAdmin(!isAdmin)} />
+							Admin
+						</label>
+					</>
+				)}
+
 				<br />
+
 				<button type="submit" disabled={isSignup}>
 					Create
 				</button>
 			</form>
-			<button onClick={handleGoogle} disabled={isLogingGoogle}>
+			{/* <button onClick={handleGoogle} disabled={isLogingGoogle}>
 				Google
-			</button>
+			</button> */}
 		</div>
 	);
 }

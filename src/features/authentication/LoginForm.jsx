@@ -1,47 +1,52 @@
 import { useState } from "react";
 import useLogin from "./useLogin";
-import useResetPassword from "./useResetPassword";
+import useRestPassword from "./useResetPassword";
 
 export default function LoginForm() {
 	const { isLogin, isLogging } = useLogin();
-	const { resetPassword, isReseting } = useResetPassword();
+	const {resetPassword, isReseting} = useRestPassword();
 	const [password, setPassword] = useState("");
 	const [email, setEmail] = useState("");
-	function handleSbmit(e) {
+
+	function handleSubmit(e) {
 		e.preventDefault();
-		alert("submit");
-		isLogin({ email, password });
+		console.log("Attempting to login with:", { email, password });
+		isLogin({ email, password }, {
+			onSettled: () => {
+				setEmail("");
+				setPassword("");
+			}
+		});
 	}
 
 	function handleResetPassword(e) {
 		e.preventDefault();
-		const emailvalue = window.prompt("Enter your email:");
-		if (emailvalue) {
-			resetPassword(emailvalue);
+		const emailValue = window.prompt("Enter your email:");
+		if (emailValue) {
+			console.log("Sending reset password email to:", emailValue);
+			resetPassword(emailValue);
 		}
 	}
 
 	return (
 		<div>
-			<form onSubmit={handleSbmit}>
+			<form onSubmit={handleSubmit}>
 				<label>Email:</label>
 				<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 				<br />
 				<label>Password:</label>
 				<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 				<br />
-				{/* //TODO add a modal pop-up */}
 				<div>
 					<p>Forgotten password:</p>
 					<button onClick={handleResetPassword} disabled={isReseting}>
-						reset
+						Reset
 					</button>
 				</div>
 				<button type="submit" disabled={isLogging}>
-					login
+					Login
 				</button>
 			</form>
-			{/* <button onClick={handleGoogle}>Google</button> */}
 		</div>
 	);
 }
