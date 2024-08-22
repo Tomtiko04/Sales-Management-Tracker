@@ -1,7 +1,8 @@
 import { addSales as addSalesApi } from "../../services/apiSales";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function useAddSales() {
+	const queryClient = useQueryClient();
 	const { mutate: addSales, isPending: isAdding } = useMutation({
 		mutationFn: ({
 			user_id,
@@ -25,6 +26,9 @@ export default function useAddSales() {
 			}),
 		onSuccess: (data) => {
 			console.log(data);
+			queryClient.invalidateQueries({
+				queryKey: ["get-sales"],
+			});
 			//TODO a toast effect
 		},
 		onError: (err) => {

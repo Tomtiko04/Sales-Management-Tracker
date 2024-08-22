@@ -3,10 +3,13 @@ import useGetAllSales from './useGetAllSales';
 
 export default function SalesHistory() {
     const {salesData} = useGetAllSales();
+   
   return (
 		<div>
 			<h1>SalesHistory</h1>
-            <List datas={salesData}/>
+			{salesData?.map((sales) => (
+				<List data={sales} key={sales.id} />
+			))}
 		</div>
 	);
 }
