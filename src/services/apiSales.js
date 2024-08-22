@@ -38,3 +38,13 @@ export async function deleteSale(productid) {
 	const { error } = await supabase.from("Sales").delete().eq("id", productid);
 	if (error) throw new Error(error.message);
 }
+
+export async function editSale({obj, eidtId}) {
+	const { data, error } = await supabase
+		.from("Sales")
+		.update(obj)
+		.eq("id", eidtId);
+	if (error) throw new Error(error.message);
+	return data;
+	//.update({ other_column: "otherValue" })
+}
