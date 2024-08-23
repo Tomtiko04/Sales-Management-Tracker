@@ -39,12 +39,26 @@ export async function deleteSale(productid) {
 	if (error) throw new Error(error.message);
 }
 
-export async function editSale({obj, eidtId}) {
+export async function editSale({
+	product_type,
+	quantity,
+	customer_name,
+	customer_address,
+	phone_number,
+	date,
+	editId,
+}) {
 	const { data, error } = await supabase
 		.from("Sales")
-		.update(obj)
-		.eq("id", eidtId);
+		.update({
+			product_type: product_type,
+			quantity: quantity,
+			customer_name: customer_name,
+			customer_address: customer_address,
+			phone_number: phone_number,
+			date: date,
+		})
+		.eq("id", editId);
 	if (error) throw new Error(error.message);
 	return data;
-	//.update({ other_column: "otherValue" })
 }

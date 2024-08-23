@@ -1,7 +1,10 @@
 import { PropTypes } from "prop-types";
 import useDeleteSale from "../features/sales-rep/useDeleteSale";
+import { useState } from "react";
+import SalesEditForm from "../features/sales-rep/SalesEditForm";
 export default function List({ data }) {
 	const { deleteSale, isDeleting } = useDeleteSale();
+	const [isEdit, setIsEdit] = useState(false);
 	function deleteSalesById(productid) {
 		deleteSale(productid);
 	}
@@ -23,7 +26,7 @@ export default function List({ data }) {
 							alignItems: "center",
 							gap: "2rem",
 						}}>
-						<button>Edit</button>
+						<button onClick={()=> setIsEdit(!isEdit)}>Edit</button>
 						<button onClick={() => deleteSalesById(data?.id)} disabled={isDeleting}>
 							Delete
 						</button>
@@ -31,6 +34,9 @@ export default function List({ data }) {
 				)}
 			</div>
 			<hr />
+			{isEdit && (
+				<SalesEditForm data={data}/>
+			)}
 		</>
 	);
 }
