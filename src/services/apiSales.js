@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import supabase from "./supabase";
 
 export async function addSales({ ...salesToAdd }) {
@@ -7,7 +8,8 @@ export async function addSales({ ...salesToAdd }) {
 }
 
 export async function getAllSales() {
-	let { data: Sales, error } = await supabase.from("Sales").select("*");
+	const id = Cookies.get("userId");
+	let { data: Sales, error } = await supabase.from("Sales").select("*").eq("user_id", id);
 	if (error) throw new Error(error.message);
 	return Sales;
 }

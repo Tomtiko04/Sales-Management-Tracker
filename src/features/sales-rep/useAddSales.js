@@ -5,8 +5,7 @@ export default function useAddSales() {
 	const queryClient = useQueryClient();
 	const { mutate: addSales, isPending: isAdding } = useMutation({
 		mutationFn: ({ ...salesToAdd }) => addSalesApi({...salesToAdd}),
-		onSuccess: (data) => {
-			console.log(data);
+		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ["get-sales"],
 			});
