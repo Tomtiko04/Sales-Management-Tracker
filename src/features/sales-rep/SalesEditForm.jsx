@@ -24,6 +24,16 @@ export default function SalesEditForm({ data }) {
 		}));
 	};
 
+    const fieldsToUpdate = {
+			product_type: formData.productType,
+			quantity: formData.quantity,
+			customer_name: formData.customerName,
+			customer_address: formData.customerAddress,
+			phone_number: formData.phoneNumber,
+			date: formData.date,
+            edit_reason: formData.editReason
+		};
+
 	const editId = data?.id;
 
 	const handleSubmit = (e) => {
@@ -32,13 +42,8 @@ export default function SalesEditForm({ data }) {
 		if (authUser?.id) {
 			isEdit(
 				{
-					product_type: formData.productType,
-					quantity: formData.quantity,
-					customer_name: formData.customerName,
-					customer_address: formData.customerAddress,
-					phone_number: formData.phoneNumber,
-					date: formData.date,
 					editId,
+					...fieldsToUpdate
 				},
 				{
 					onSettled: () => {
@@ -48,6 +53,7 @@ export default function SalesEditForm({ data }) {
 							customerName: "",
 							customerAddress: "",
 							phoneNumber: "",
+							editReason: "",
 							date: "",
 						});
 					},
@@ -63,7 +69,12 @@ export default function SalesEditForm({ data }) {
 			<h1>SalesEditForm</h1>
 			<form onSubmit={handleSubmit}>
 				<label>Product type</label>
-				<select name="productType" value={formData.productType} onChange={handleChange} required>
+				<select
+					name="productType"
+					value={formData.productType}
+					onChange={handleChange}
+					required
+					disabled={isEditing}>
 					<option value="" disabled>
 						Product Type
 					</option>
@@ -82,6 +93,7 @@ export default function SalesEditForm({ data }) {
 					required
 					value={formData.quantity}
 					onChange={handleChange}
+					disabled={isEditing}
 				/>
 				<br />
 				<hr />
@@ -93,6 +105,7 @@ export default function SalesEditForm({ data }) {
 					required
 					value={formData.customerName}
 					onChange={handleChange}
+					disabled={isEditing}
 				/>
 				<br />
 				<hr />
@@ -104,6 +117,7 @@ export default function SalesEditForm({ data }) {
 					required
 					value={formData.customerAddress}
 					onChange={handleChange}
+					disabled={isEditing}
 				/>
 				<br />
 				<hr />
@@ -115,6 +129,7 @@ export default function SalesEditForm({ data }) {
 					required
 					value={formData.phoneNumber}
 					onChange={handleChange}
+					disabled={isEditing}
 				/>
 				<br />
 				<hr />
@@ -126,11 +141,19 @@ export default function SalesEditForm({ data }) {
 					required
 					value={formData.editReason}
 					onChange={handleChange}
+					disabled={isEditing}
 				/>
 				<br />
 				<hr />
 				<label>Supply Date</label>
-				<input name="date" type="date" required value={formData.date} onChange={handleChange} />
+				<input
+					name="date"
+					type="date"
+					required
+					value={formData.date}
+					onChange={handleChange}
+					disabled={isEditing}
+				/>
 				<br />
 				<hr />
 				<button type="submit" disabled={isEditing}>

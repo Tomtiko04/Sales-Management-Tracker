@@ -6,22 +6,12 @@ export default function useEditSale() {
 	const { mutate: isEdit, isPending: isEditing } = useMutation({
 		mutationKey: ["sale-edit"],
 		mutationFn: ({
-			product_type,
-			quantity,
-			customer_name,
-			customer_address,
-			phone_number,
-			date,
 			editId,
+			...fieldsToUpdate
 		}) => {
 			editSaleApi({
-				product_type,
-				quantity,
-				customer_name,
-				customer_address,
-				phone_number,
-				date,
 				editId,
+				...fieldsToUpdate
 			});
 		},
 		onSuccess: () => {

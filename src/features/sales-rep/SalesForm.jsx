@@ -6,8 +6,8 @@ import useAddSales from "./useAddSales";
 import useAuthUser from "../../hook/useAuthUser";
 
 export default function SalesForm() {
-	const { addSales, isAdding } = useAddSales();
 	const {authUser} = useAuthUser();
+	const { addSales, isAdding } = useAddSales();
 	const [formData, setFormData] = useState({
 		productType: "",
 		quantity: "",
@@ -31,16 +31,7 @@ export default function SalesForm() {
 
 		if (authUser?.id) {
 			addSales(
-				{
-					user_id: authUser.id,
-					product_type: formData.productType,
-					quantity: formData.quantity,
-					customer_name: formData.customerName,
-					customer_address: formData.customerAddress,
-					phone_number: formData.phoneNumber,
-					additional_info: formData.additionalInfo,
-					date: formData.date,
-				},
+				sale,
 				{
 					onSettled: () => {
 						setFormData({
@@ -60,12 +51,30 @@ export default function SalesForm() {
 		}
 	};
 
+		const sale = {
+			user_id: authUser?.id,
+			product_type: formData.productType,
+			quantity: formData.quantity,
+			customer_name: formData.customerName,
+			customer_address: formData.customerAddress,
+			phone_number: formData.phoneNumber,
+			additional_info: formData.additionalInfo,
+			date: formData.date,
+			status: false,
+			review: "unconfirmed",
+		};
+
 	return (
 		<div>
 			<h2>Sales Form</h2>
 			<form onSubmit={handleSubmit}>
 				<label>Product type</label>
-				<select name="productType" value={formData.productType} onChange={handleChange} required>
+				<select
+					name="productType"
+					value={formData.productType}
+					onChange={handleChange}
+					required
+					disabled={isAdding}>
 					<option value="" disabled>
 						Product Type
 					</option>
@@ -84,6 +93,7 @@ export default function SalesForm() {
 					required
 					value={formData.quantity}
 					onChange={handleChange}
+					disabled={isAdding}
 				/>
 				<br />
 				<hr />
@@ -95,6 +105,7 @@ export default function SalesForm() {
 					required
 					value={formData.customerName}
 					onChange={handleChange}
+					disabled={isAdding}
 				/>
 				<br />
 				<hr />
@@ -106,6 +117,7 @@ export default function SalesForm() {
 					required
 					value={formData.customerAddress}
 					onChange={handleChange}
+					disabled={isAdding}
 				/>
 				<br />
 				<hr />
@@ -117,6 +129,7 @@ export default function SalesForm() {
 					required
 					value={formData.phoneNumber}
 					onChange={handleChange}
+					disabled={isAdding}
 				/>
 				<br />
 				<hr />
@@ -128,15 +141,23 @@ export default function SalesForm() {
 					required
 					value={formData.additionalInfo}
 					onChange={handleChange}
+					disabled={isAdding}
 				/>
 				<br />
 				<hr />
 				<label>Supply Date</label>
-				<input name="date" type="date" required value={formData.date} onChange={handleChange} />
+				<input
+					name="date"
+					type="date"
+					required
+					value={formData.date}
+					onChange={handleChange}
+					disabled={isAdding}
+				/>
 				<br />
 				<hr />
 				<button type="submit" disabled={isAdding}>
-					Submit
+					Add
 				</button>
 			</form>
 		</div>

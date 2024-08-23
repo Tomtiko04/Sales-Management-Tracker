@@ -1,143 +1,156 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useSignup } from "./useSignup";
-// import useGoogle from "./useGoogle";
-// import useRoles from "../../context/useRoles";
-// import useSubDistributors from "../../context/useSubDistributors";
 
 export default function SignupForm() {
 	const { signup, isSignup } = useSignup();
-	// const { isLoginGoogle, isLogingGoogle } = useGoogle();
-	// const {roleData} = useRoles();
-	// const {subList} = useSubDistributors();
+	const [formData, setFormData] = useState({
+		name: "",
+		userName: "",
+		password: "",
+		email: "",
+		contact: "",
+		type: "",
+		distributor: "",
+		isAdmin: false,
+		distributorId: "KURU00",
+	});
 
+	const handleChange = (e) => {
+		const { name, value, type, checked } = e.target;
+		setFormData((prevData) => ({
+			...prevData,
+			[name]: type === "checkbox" ? checked : value,
+		}));
+	};
 
-	const [name, setName] = useState("");
-	const [userName, setUserName] = useState("");
-	const [password, setPassword] = useState("");
-	const [email, setEmail] = useState("");
-	const [contact, setContact] = useState("");
-	const [type, setTypes] = useState("");
-	const [distributor, setDistributor] = useState("");
-	const [isAdmin, setIsAdmin] = useState(false);
-	// const [avaliableRoles, setAvaliableRoles] = useState([]);
-	// const [avaliableRoles] = useState([]);
-	// const [avaliableSubDistributors, setAvaliableSubDistributors] = useState([]);
-	// const [avaliableSubDistributors ] = useState([]);
-	const [distributorId, setDistributorId] = useState('KURU00');
-
-	function handleSbmit(e) {
+	const handleSubmit = (e) => {
 		e.preventDefault();
-		signup({ name, contact, type, distributor, distributorId, userName, isAdmin, email, password }, {
+		signup(formData, {
 			onSettled: () => {
-				setName("");
-				setUserName("");
-				setPassword("");
-				setEmail("");
-				setContact("");
-				setTypes("");
-				setDistributor("");
-				setIsAdmin(false);
-
-			}
+				setFormData({
+					name: "",
+					userName: "",
+					password: "",
+					email: "",
+					contact: "",
+					type: "",
+					distributor: "",
+					isAdmin: false,
+					distributorId: "KURU00",
+				});
+			},
 		});
-	}
-
-	// function handleGoogle() {
-	// 	isLoginGoogle();
-	// }
-
-	// useEffect(function(){
-	// 	if(roleData){
-	// 		setAvaliableRoles(roleData)
-	// 	}
-	// }, [roleData])
-
-	// useEffect(
-	// 	function () {
-	// 		if (subList) {
-	// 			setAvaliableSubDistributors(subList);
-	// 		}
-	// 	},
-	// 	[subList]
-	// );
+	};
 
 	return (
 		<div>
-			<form onSubmit={handleSbmit}>
+			<form onSubmit={handleSubmit}>
 				<label>Full Name:</label>
-				<input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+				<input
+					type="text"
+					name="name"
+					value={formData.name}
+					onChange={handleChange}
+					disabled={isSignup}
+				/>
 				<br />
 
 				<label>User Name:</label>
-				<input type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
-
+				<input
+					type="text"
+					name="userName"
+					value={formData.userName}
+					onChange={handleChange}
+					disabled={isSignup}
+				/>
 				<br />
+
 				<label>Email:</label>
-				<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+				<input
+					type="email"
+					name="email"
+					value={formData.email}
+					onChange={handleChange}
+					disabled={isSignup}
+				/>
+				<br />
 
 				<label>Phone Number:</label>
-				<input type="number" value={contact} onChange={(e) => setContact(e.target.value)} />
-
+				<input
+					type="number"
+					name="contact"
+					value={formData.contact}
+					onChange={handleChange}
+					disabled={isSignup}
+				/>
 				<br />
+
 				<label>Password:</label>
-				<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-
+				<input
+					type="password"
+					name="password"
+					value={formData.password}
+					onChange={handleChange}
+					disabled={isSignup}
+				/>
 				<br />
+
 				<label>Role:</label>
-				<select value={type} onChange={(e) => setTypes(e.target.value)}>
+				<select name="type" value={formData.type} onChange={handleChange} disabled={isSignup}>
 					<option value="">Please choose an option</option>
-					{/* {avaliableRoles.map((roles) => (
-						<option key={roles.id} value={roles.role}>
-							{roles.name}
-						</option>
-					))} */}
 					<option value="sales-rep">Sales Representative</option>
 					<option value="sub-distributor">Sub Distributor</option>
 					<option value="admin">Admin</option>
 				</select>
-
 				<br />
 
-				{type === "sub-distributor" && (
+				{formData.type === "sub-distributor" && (
 					<>
 						<label>Associated Distributor ID:</label>
 						<input
 							type="text"
-							value={distributorId}
-							onChange={(e) => setDistributorId(e.target.value)}
+							name="distributorId"
+							value={formData.distributorId}
+							onChange={handleChange}
+							disabled={isSignup}
 						/>
 					</>
 				)}
 
-				{type === "sales-rep" && (
+				{formData.type === "sales-rep" && (
 					<>
 						<label>Associated Sub-Distributor:</label>
-						<select value={distributor} onChange={(e) => setDistributor(e.target.value)}>
+						<select
+							name="distributor"
+							value={formData.distributor}
+							onChange={handleChange}
+							disabled={isSignup}>
 							<option value="">Please choose an option</option>
 							<option value="shade">Shade</option>
-							{/* {avaliableSubDistributors.map((sublist)=> <option key={subList.id}>{sublist.name}</option>)} */}
 						</select>
 					</>
 				)}
 
-				{type === "admin" && (
+				{formData.type === "admin" && (
 					<>
 						<label>
-							<input type="checkbox" value={isAdmin} onChange={() => setIsAdmin(!isAdmin)} />
+							<input
+								type="checkbox"
+								name="isAdmin"
+								checked={formData.isAdmin}
+								onChange={handleChange}
+								disabled={isSignup}
+							/>
 							Admin
 						</label>
 					</>
 				)}
-
 				<br />
 
 				<button type="submit" disabled={isSignup}>
-					Create
+					Create new User
 				</button>
 			</form>
-			{/* <button onClick={handleGoogle} disabled={isLogingGoogle}>
-				Google
-			</button> */}
 		</div>
 	);
 }

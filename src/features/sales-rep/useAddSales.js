@@ -4,26 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export default function useAddSales() {
 	const queryClient = useQueryClient();
 	const { mutate: addSales, isPending: isAdding } = useMutation({
-		mutationFn: ({
-			user_id,
-			product_type,
-			quantity,
-			customer_name,
-			customer_address,
-			phone_number,
-			additional_info,
-			date,
-		}) =>
-			addSalesApi({
-				user_id,
-				product_type,
-				quantity,
-				customer_name,
-				customer_address,
-				phone_number,
-				additional_info,
-				date,
-			}),
+		mutationFn: ({ ...salesToAdd }) => addSalesApi({...salesToAdd}),
 		onSuccess: (data) => {
 			console.log(data);
 			queryClient.invalidateQueries({

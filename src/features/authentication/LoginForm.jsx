@@ -32,10 +32,20 @@ export default function LoginForm() {
 		<div>
 			<form onSubmit={handleSubmit}>
 				<label>Email:</label>
-				<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+				<input
+					type="email"
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+					disabled={isLogging}
+				/>
 				<br />
 				<label>Password:</label>
-				<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+				<input
+					type="password"
+					value={password}
+					onChange={(e) => setPassword(e.target.value)}
+					disabled={isLogging}
+				/>
 				<br />
 				<div>
 					<p>Forgotten password:</p>
