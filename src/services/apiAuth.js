@@ -56,6 +56,16 @@ export async function signup({
 	password,
 	isAdmin,
 }) {
+	console.log({
+		fullName: name,
+		phone: contact,
+		role: type,
+		distributor,
+		distributorId,
+		userName,
+		isAdmin,
+	});
+
 	const { data, error } = await supabase.auth.signUp({
 		email,
 		password,
@@ -66,14 +76,12 @@ export async function signup({
 				role: type,
 				distributor,
 				distributorId,
-				userName: userName,
-				isAdmin: isAdmin
+				userName,
+				isAdmin,
 			},
 		},
 	});
-
 	if (error) throw new Error(error.message);
-
 	return data;
 }
 

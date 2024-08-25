@@ -12,7 +12,7 @@ export default function SignupForm() {
 		type: "",
 		distributor: "",
 		isAdmin: false,
-		distributorId: "KURU00",
+		distributorId: "",
 	});
 
 	const handleChange = (e) => {
@@ -36,7 +36,7 @@ export default function SignupForm() {
 					type: "",
 					distributor: "",
 					isAdmin: false,
-					distributorId: "KURU00",
+					distributorId: "",
 				});
 			},
 		});
@@ -125,8 +125,22 @@ export default function SignupForm() {
 							value={formData.distributor}
 							onChange={handleChange}
 							disabled={isSignup}>
-							<option value="">Please choose an option</option>
-							<option value="shade">Shade</option>
+							<option value="" disabled>Please choose an option</option>
+							<option value="Ogunneye Rasheedat">Ogunneye Rasheedat</option>
+							<option value="Ogunneye Fatimah">Ogunneye Fatimah</option>
+							<option value="Bada Modupe">Bada Modupe</option>
+						</select>
+						<br />
+						<label>Distributor ID:</label>
+						<select
+							name="distributorId"
+							value={formData.distributorId}
+							onChange={handleChange}
+							disabled={isSignup}>
+							<option value="" disabled>Please choose an option</option>
+							<option value="KUKU001">KUKU001</option>
+							<option value="KUKU002">KUKU002</option>
+							<option value="KUKU003">KUKU003</option>
 						</select>
 					</>
 				)}

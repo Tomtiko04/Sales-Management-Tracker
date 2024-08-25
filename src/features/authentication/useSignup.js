@@ -3,7 +3,9 @@ import { signup as signupApi } from "../../services/apiAuth";
 
 export function useSignup() {
 	const { mutate: signup, isPending: isSignup } = useMutation({
-		mutationFn: signupApi,
+		mutationFn: (formData) => {
+			return signupApi(formData); 
+		},
 		onSuccess: () => {
 			console.log("Account created");
 		},
@@ -15,3 +17,4 @@ export function useSignup() {
 
 	return { signup, isSignup };
 }
+

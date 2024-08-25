@@ -15,8 +15,11 @@ export default function useLogin() {
 			Cookies.set("role", data.user.user_metadata.role);
 			// Authetication status
 			Cookies.set("authentication", data.user.role);
-			// User ID 
-			Cookies.set("userId", data.user.id)
+			// User ID
+			Cookies.set("userId", data.user.id);
+			navigate("/dashboard");
+			// Sub ID
+			Cookies.set("distributorId", data.user.user_metadata.distributorId);
 			navigate("/dashboard");
 		},
 		onError: (err) => {

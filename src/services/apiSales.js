@@ -24,3 +24,20 @@ export async function editSale({ editId, ...fieldsToUpdate }) {
 	if (error) throw new Error(error.message);
 	return data;
 }
+
+export async function getSalesBySub() {
+	const sub_distributor_id = Cookies.get("distributorId");
+	console.log(sub_distributor_id);
+	let { data: Sales, error } = await supabase
+		.from("Sales")
+		.select("*")
+		.eq("sub_distributor_id", sub_distributor_id);
+	if (error) throw new Error(error.message);
+	return Sales;
+}
+
+export async function editSalesStatus(status, saleId) {
+	const { data, error } = await supabase.from("Sales").update({status: status}).eq("id", saleId);
+	if (error) throw new Error(error.message);
+	return data;
+}

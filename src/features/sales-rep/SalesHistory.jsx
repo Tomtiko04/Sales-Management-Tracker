@@ -20,4 +20,4 @@ export default function SalesHistory() {
 }
 
 
-//todo filter by review, search buy customers name
+//todo filter by review state, search buy customers name

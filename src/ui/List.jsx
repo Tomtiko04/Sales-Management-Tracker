@@ -12,13 +12,15 @@ export default function List({ data }) {
 		<>
 			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 				<p>{data?.quantity}</p>
+				<p>{data?.product_type}</p>
 				<p>{data?.customer_name}</p>
 				<p>{data?.customer_address}</p>
 				<p>{data?.phone_number}</p>
 				<p>{data?.additional_info}</p>
 				<p>{data?.date}</p>
-				<p>{data?.review}</p>
-				{data?.review === "unconfirmed" && (
+				<p>{data?.status}</p>
+				{/* <p>{data?.review}</p> */}
+				{data?.status === "Pending" && (
 					<div
 						style={{
 							display: "flex",

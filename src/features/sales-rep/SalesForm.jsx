@@ -6,7 +6,7 @@ import useAddSales from "./useAddSales";
 import useAuthUser from "../../hook/useAuthUser";
 
 export default function SalesForm() {
-	const {authUser} = useAuthUser();
+	const { authUser } = useAuthUser();
 	const { addSales, isAdding } = useAddSales();
 	const [formData, setFormData] = useState({
 		productType: "",
@@ -17,6 +17,21 @@ export default function SalesForm() {
 		additionalInfo: "",
 		date: "",
 	});
+
+	const sale = {
+		user_id: authUser?.id,
+		product_type: formData.productType,
+		quantity: formData.quantity,
+		customer_name: formData.customerName,
+		customer_address: formData.customerAddress,
+		phone_number: formData.phoneNumber,
+		additional_info: formData.additionalInfo,
+		date: formData.date,
+		status: "Pending",
+		review: "Pending",
+		sub_distributor_id: authUser?.user_metadata?.distributorId,
+		rep_name: authUser?.user_metadata?.userName,
+	};
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -30,39 +45,23 @@ export default function SalesForm() {
 		e.preventDefault();
 
 		if (authUser?.id) {
-			addSales(
-				sale,
-				{
-					onSettled: () => {
-						setFormData({
-							productType: "",
-							quantity: "",
-							customerName: "",
-							customerAddress: "",
-							phoneNumber: "",
-							additionalInfo: "",
-							date: "",
-						});
-					},
-				}
-			);
+			addSales(sale, {
+				onSettled: () => {
+					setFormData({
+						productType: "",
+						quantity: "",
+						customerName: "",
+						customerAddress: "",
+						phoneNumber: "",
+						additionalInfo: "",
+						date: "",
+					});
+				},
+			});
 		} else {
 			alert("You must be logged in to submit a sale.");
 		}
 	};
-
-		const sale = {
-			user_id: authUser?.id,
-			product_type: formData.productType,
-			quantity: formData.quantity,
-			customer_name: formData.customerName,
-			customer_address: formData.customerAddress,
-			phone_number: formData.phoneNumber,
-			additional_info: formData.additionalInfo,
-			date: formData.date,
-			status: false,
-			review: "unconfirmed",
-		};
 
 	return (
 		<div>
