@@ -37,7 +37,11 @@ export async function getSalesBySub() {
 }
 
 export async function editSalesStatus(status, saleId) {
-	const { data, error } = await supabase.from("Sales").update({status: status}).eq("id", saleId);
-	if (error) throw new Error(error.message);
+	const { data, error } = await supabase.from("Sales").update({ status: status }).eq("id", saleId);
+	if (error) {
+		console.error("Error updating status:", error.message);
+		throw new Error(error.message);
+	}
+	console.log("Update response:", data);
 	return data;
 }

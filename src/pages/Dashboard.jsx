@@ -1,18 +1,23 @@
-import AdminDashboard from "../features/dashboard/AdminDashboard";
-import SalesRepDashboard from "../features/dashboard/SalesRepDashboard";
-import SubDistributorDashboard from "../features/dashboard/SubDistributorDashboard";
-import Cookies from "js-cookie";
 import Login from "./Login";
+import useAuthUser from "../hook/useAuthUser";
+import AdminDashboard from "../features/dashboard/AdminDashboard";
+import ProducerDashboard from "../features/dashboard/ProducerDashboard";
+import DistributorDashboard from "../features/dashboard/DistributorDashboard";
+import SubDistributorDashboard from "../features/dashboard/SubDistributorDashboard";
+import SalesRepDashboard from "../features/dashboard/SalesRepDashboard";
 
 export default function Dashboard() {
-	const isAuthenticated = Cookies.get("authentication") === "authenticated";
-	const role = Cookies.get("role");
+	const { authUser } = useAuthUser();
+	const isAuthenticated = authUser?.aud;
+	const role = authUser?.user_metadata?.role;
 
 	return (
 		<>
 			{isAuthenticated ? (
 				<div>
 					{role === "admin" && <AdminDashboard />}
+					{role === "producer" && <ProducerDashboard />}
+					{role === "distributor" && <DistributorDashboard />}
 					{role === "sub-distributor" && <SubDistributorDashboard />}
 					{role === "sales-rep" && <SalesRepDashboard />}
 				</div>

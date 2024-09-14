@@ -1,23 +1,25 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import useAuthUser from "../hook/useAuthUser";
 
-export default function AdminProtectedRoute({ children }) {
-  const navigate = useNavigate();
-  const isAuthenticated = Cookies.get("authentication") === "authenticated";
-  const isAdmin = Cookies.get("role") === "admin";
+export default function AdminProtectedRoute({ children, allowedRoles }) {
+	const navigate = useNavigate();
+	const { authUser } = useAuthUser();
+	const isAuthenticated = !!authUser?.aud;
+	const role = authUser?.user_metadata?.role;
 
-  useEffect(() => {
-    if (!isAuthenticated || !isAdmin) {
-      navigate("/auth/login");
-      alert("Can't access this page");
-    }
-  }, [isAuthenticated, isAdmin, navigate]);
+	useEffect(() => {
+		if (!isAuthenticated || !allowedRoles.includes(role)) {
+			navigate("/auth/login", { replace: true });
+			// alert("You don't have permission to access this page");
+		}
+	}, [isAuthenticated, role, allowedRoles, navigate]);
 
-  return isAuthenticated && isAdmin ? children : null;
+	return isAuthenticated && allowedRoles.includes(role) ? children : null;
 }
 
 AdminProtectedRoute.propTypes = {
-  children: PropTypes.any,
+	children: PropTypes.node.isRequired,
+	allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

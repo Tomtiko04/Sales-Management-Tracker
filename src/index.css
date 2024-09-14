@@ -8,3 +8,26 @@ body{
     padding: 0;
     box-sizing: border-box;
 } */
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+body {
+	/* font-family: "Space Grotesk", sans-serif; */
+	overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6{
+	text-wrap: balance;
+}
+
+p, li, figcaption{
+	text-wrap: pretty;
+	max-width: 65ch;
+}
+
+header, footer, main, section, article{
+	container-type: inline-size;
+}
