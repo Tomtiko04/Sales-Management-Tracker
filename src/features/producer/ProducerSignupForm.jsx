@@ -10,7 +10,7 @@ const steps = [
 	"Legal and Compliance",
 ];
 
-export default function CompanySignupForm() {
+export default function ProducerSignupForm() {
 	const { signup, isSignup } = useSignup();
 	const { authUser } = useAuthUser();
 	const authUserId = authUser?.id;

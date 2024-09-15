@@ -1,5 +1,5 @@
 import useAuthUser from "../hook/useAuthUser";
-import CompanySignupForm from "../features/company/CompanySignupForm";
+import ProducerSignupForm from "../features/producer/ProducerSignupForm";
 import DistributorSignupForm from "../features/distributor/DistributorSignupForm";
 import SubDistributorSignupForm from "../features/sub-distributor/SubDistributorSignupForm";
 import SalesRepSignupForm from "../features/sales-rep/SalesRepSignupForm";
@@ -13,7 +13,7 @@ export default function Signup() {
 		<>
 			{isAuthenticated ? (
 				<div>
-					{role === "admin" && <CompanySignupForm />}
+					{role === "admin" && <ProducerSignupForm />}
 					{role === "producer" && <DistributorSignupForm />}
 					{role === "distributor" && <SubDistributorSignupForm />}
 					{role === "sub-distributor" && <SalesRepSignupForm />}
