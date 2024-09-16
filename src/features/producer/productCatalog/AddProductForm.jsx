@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import useGetProductCategory from "../category/useGetProductCategory";
+import useAddProduct from "./useAddProduct";
+import useAuthUser from "../../../hook/useAuthUser";
 
 const AddProductForm = () => {
 	const [formData, setFormData] = useState({
@@ -15,6 +17,8 @@ const AddProductForm = () => {
 		expiryDate: "",
 	});
 	const { getCategories, isGettingCategories } = useGetProductCategory();
+	const {isAddProduct, isAddingProduct} = useAddProduct();
+	const {authUser} = useAuthUser();
 	const [categories, setCategories] = useState([]);
 	const [errors, setErrors] = useState({});
 
@@ -60,18 +64,35 @@ const AddProductForm = () => {
 
 		if (!validateForm()) return;
 		const productData = {
-			productName: formData.productName,
+			product_name: formData.productName,
 			sku: formData.sku,
+			producer_id: authUser?.id,
 			price: parseFloat(formData.price),
-			costPrice: parseFloat(formData.costPrice),
+			cost_price: parseFloat(formData.costPrice),
 			category: formData.category,
 			description: formData.description,
-			stockQuantity: parseInt(formData.stockQuantity),
-			manufacturingDate: formData.manufacturingDate,
-			expiryDate: formData.expiryDate,
-			productImage: formData.productImage,
+			stock_quantity: parseInt(formData.stockQuantity),
+			manufacturing_date: formData.manufacturingDate,
+			expiry_date: formData.expiryDate,
+			product_image: formData.productImage,
 		};
-		console.log("Product Submitted:", productData);
+
+		isAddProduct(productData, {
+			onSettled: () => {
+				setFormData({
+					productName: "",
+					sku: "",
+					price: "",
+					costPrice: "",
+					category: "",
+					description: "",
+					stockQuantity: "",
+					productImage: null,
+					manufacturingDate: "",
+					expiryDate: "",
+				});
+			}
+		})
 	};
 
 	return (
@@ -128,9 +149,11 @@ const AddProductForm = () => {
 					disabled={isGettingCategories}>
 					<option value="">Select Category</option>
 					{categories?.map((cat) => (
-						<option key={cat.id} value={cat.category_name}>
-							{cat.category_name}
-						</option>
+						<>
+							<option key={cat.id} value={cat.category_name}>
+								{cat.category_name}
+							</option>
+						</>
 					))}
 				</select>
 				{errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
@@ -185,7 +208,9 @@ const AddProductForm = () => {
 				<input type="file" onChange={handleImageUpload} />
 			</div>
 
-			<button type="submit">Add Product</button>
+			<button type="submit" disabled={isAddingProduct}>
+				Add Product
+			</button>
 		</form>
 	);
 };
