@@ -5,7 +5,7 @@ export async function addProduct({ ...productData }) {
 	if (!productData.producer_id) {
 		throw new Error("User id not set");
 	}
-	const { data, error } = await supabase.from("producerProductsCatalog").insert([productData]);
+	const { data, error } = await supabase.from("products").insert([productData]);
 	if (error) throw new Error(error.message);
 	return data;
 }
@@ -13,7 +13,7 @@ export async function addProduct({ ...productData }) {
 export async function getProduct() {
 	const id = Cookies.get("userId");
 	let { data, error } = await supabase
-		.from("producerProductsCatalog")
+		.from("products")
 		.select("*")
 		.eq("producer_id", id)
 		.range(0, 9);
@@ -23,8 +23,52 @@ export async function getProduct() {
 	return data;
 }
 
+// export async function editProductQuantity({...editData}) {
+// 	// if (!editData.producerId) {
+// 	// 	throw new Error("User needs to be login");
+// 	// }
+// 	const { data, error } = await supabase
+// 		.from("products")
+// 		.update({ total_quantity: editData.quantity })
+// 		.eq("id", editData.productId);
+
+// 	if(error) throw new Error("Something went wrong at this point!!!");
+// console.log("data", data);
+// 	return data;
+// }
+
+export async function editProductQuantity({ productId, additionalQuantity, movementType }) {
+	const { data: currentProduct, error: productError } = await supabase
+		.from("products")
+		.select("total_quantity")
+		.eq("id", productId)
+		.single();
+
+	if (productError) throw new Error("Failed to fetch current product quantity!");
+
+	let newTotalQuantity;
+
+	if(movementType === "IN"){
+		newTotalQuantity = currentProduct.total_quantity + additionalQuantity;
+	}
+    
+	if(movementType === "OUT"){
+		newTotalQuantity = currentProduct.total_quantity - additionalQuantity;
+	}
+
+	const { data, error } = await supabase
+		.from("products")
+		.update({ total_quantity: newTotalQuantity })
+		.eq("id", productId);
+
+	if (error) throw new Error("Failed to update product quantity!");
+	console.log("Updated product quantity:", data);
+	return data;
+}
+
+
 export async function deleteProduct(productId) {
-	const { error } = await supabase.from("producerProductsCatalog").delete().eq("id", productId);
+	const { error } = await supabase.from("products").delete().eq("id", productId);
 	if (error) throw new Error(error.message);
 }
 
@@ -39,7 +83,7 @@ export async function deleteProduct(productId) {
 
 // 		// 2. Insert product data, using the image path
 // 		const { data, error } = await supabase
-// 			.from("producerProductsCatalog")
+// 			.from("products")
 // 			.insert([{ ...productData, product_image: imagePath }]);
 
 // 		if (error) throw new Error(error.message);
@@ -51,7 +95,7 @@ export async function deleteProduct(productId) {
 
 // 		// 4. If there's an error uploading the image, delete the product
 // 		if (storageError) {
-// 			await supabase.from("producerProductsCatalog").delete().eq("id", data.id); // Ensure you use `data[0].id` to target the correct row
+// 			await supabase.from("products").delete().eq("id", data.id); // Ensure you use `data[0].id` to target the correct row
 
 // 			console.error(storageError);
 // 			throw new Error("Product image could not be uploaded, and the product was deleted.");
@@ -87,9 +131,9 @@ export async function deleteProduct(productId) {
 // 		// 4. Create image path from Supabase storage public URL
 // 		const imagePath = supabase.storage.from("product-images").getPublicUrl(imageName).publicUrl;
 
-// 		// 5. Insert product data into the 'producerProductsCatalog' table
+// 		// 5. Insert product data into the 'products' table
 // 		const { data, error } = await supabase
-// 			.from("producerProductsCatalog")
+// 			.from("products")
 // 			.insert([{ ...productData, product_image: imagePath }]);
 
 // 		if (error) throw new Error(error.message);
