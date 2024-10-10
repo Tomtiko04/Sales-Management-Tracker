@@ -4,6 +4,10 @@ import useGetProductCategory from "./useGetProductCategory";
 import useAuthUser from "../../../hook/useAuthUser";
 import useDeleteCategory from "./useDeleteCategory";
 import useEditCategory from "./useEditCategory";
+import { Box } from "@mui/material";
+import Empty from "../../../ui/Empty";
+import InputFieldSave from "../../../ui/InputFieldSave";
+// import FormControlLabel from "@mui/material/FormControlLabel";
 
 const CategoryManagement = () => {
 	const { addCategory, isAddingCategory } = useAddProductCategory();
@@ -23,8 +27,7 @@ const CategoryManagement = () => {
 	}, [getCategories]);
 
 	//Creating new Category
-	function addProductCategory(e) {
-		e.preventDefault();
+	function addProductCategory() {
 		addCategory({
 			categoryName,
 			userId,
@@ -33,36 +36,35 @@ const CategoryManagement = () => {
 		setCategoryName("");
 	}
 
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		addProductCategory();
+	};
+
 	//Edit category
-	function handleEdit(editId, categoryName){
+	function handleEdit(editId, categoryName) {
 		isEditCategory({ editId, categoryName });
 	}
-	
+
 	//Delete category
-	function handleDelete(categoryId){
-		isDeleteCategoty(categoryId)
+	function handleDelete(categoryId) {
+		isDeleteCategoty(categoryId);
 	}
 
 	return (
-		<div>
-			<form onSubmit={addProductCategory}>
-				<input
-					type="text"
-					value={categoryName}
-					onChange={(e) => setCategoryName(e.target.value)}
-					placeholder="Category Name"
-					required
-				/>
-				<button type="submit" disabled={isAddingCategory}>
-					Add Category
-				</button>
-			</form>
-
+		<Box sx={{ maxWidth: "100%", margin: "auto", padding: 2 }}>
+			<InputFieldSave
+				handleSubmit={handleSubmit}
+				label="Category Name"
+				categoryName={categoryName}
+				setCategoryName={setCategoryName}
+				isAddingCategory={isAddingCategory}
+			/>
 			{isGettingCategories && <div>Loading</div>}
 
 			{categories?.length == 0 ? (
 				<div>
-					<p>Empty Category</p>
+					<Empty emptyText="No category" />
 				</div>
 			) : (
 				<>
@@ -73,13 +75,17 @@ const CategoryManagement = () => {
 								<button onClick={() => handleDelete(category.id)} disabled={isDeletingCategory}>
 									Delete
 								</button>
-								<button onClick={()=> handleEdit(category.id, category.category_name)} disabled={isEditingCategory}>Edit</button>
+								<button
+									onClick={() => handleEdit(category.id, category.category_name)}
+									disabled={isEditingCategory}>
+									Edit
+								</button>
 							</li>
 						))}
 					</ul>
 				</>
 			)}
-		</div>
+		</Box>
 	);
 };
 
