@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import RequestResetForm from "./features/authentication/RequestResetForm";
 import useAuthUser from "./hook/useAuthUser";
+import CategoryManagement from "./features/producer/category/CategoryManagement";
 
 export default function App() {
 	const { authUser } = useAuthUser();
@@ -40,6 +41,14 @@ export default function App() {
 							element={
 								<ProtectedRoute>
 									<Dashboard />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="category"
+							element={
+								<ProtectedRoute>
+									<CategoryManagement />
 								</ProtectedRoute>
 							}
 						/>

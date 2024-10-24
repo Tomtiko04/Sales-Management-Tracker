@@ -7,7 +7,8 @@ import useEditCategory from "./useEditCategory";
 import { Box } from "@mui/material";
 import Empty from "../../../ui/Empty";
 import InputFieldSave from "../../../ui/InputFieldSave";
-// import FormControlLabel from "@mui/material/FormControlLabel";
+import CategoryTable from "./CategoryTable";
+import SearchBar from "./CategorySearch";
 
 const CategoryManagement = () => {
 	const { addCategory, isAddingCategory } = useAddProductCategory();
@@ -17,10 +18,13 @@ const CategoryManagement = () => {
 	const { authUser } = useAuthUser();
 	const [categoryName, setCategoryName] = useState("");
 	const [categories, setCategories] = useState([]);
+	const [isModal, setIsModal] = useState(false);
 
 	const userId = authUser?.id;
 	const companyName = authUser?.user_metadata.company_name;
 
+	//TODO Use context for these functions
+	
 	//Storing fetched categories
 	useEffect(() => {
 		setCategories(getCategories);
@@ -51,40 +55,48 @@ const CategoryManagement = () => {
 		isDeleteCategoty(categoryId);
 	}
 
+	function openEditModal(){
+		setIsModal(!isModal);
+	}
+
 	return (
 		<Box sx={{ maxWidth: "100%", margin: "auto", padding: 2 }}>
+			<div>
+				<h4 style={{ marginBottom: "1em" }}>Product Category</h4>
+			</div>
 			<InputFieldSave
 				handleSubmit={handleSubmit}
 				label="Category Name"
 				categoryName={categoryName}
 				setCategoryName={setCategoryName}
 				isAddingCategory={isAddingCategory}
+				isGettingCategories={isGettingCategories}
 			/>
-			{isGettingCategories && <div>Loading</div>}
 
-			{categories?.length == 0 ? (
-				<div>
-					<Empty emptyText="No category" />
-				</div>
-			) : (
-				<>
-					<ul>
-						{categories?.map((category) => (
-							<li key={category.id}>
-								{category.category_name}
-								<button onClick={() => handleDelete(category.id)} disabled={isDeletingCategory}>
-									Delete
-								</button>
-								<button
-									onClick={() => handleEdit(category.id, category.category_name)}
-									disabled={isEditingCategory}>
-									Edit
-								</button>
-							</li>
-						))}
-					</ul>
-				</>
-			)}
+			{/* TODO search bar */}
+			<SearchBar />
+			{/* Connect the search */}
+
+			<div style={{ marginTop: "40px" }}>
+				{categories?.length == 0 ? (
+					<div>
+						<Empty emptyText="No category" />
+					</div>
+				) : (
+					<>
+						<CategoryTable
+							handleEdit={handleEdit}
+							handleDelete={handleDelete}
+							categories={categories}
+							isDeletingCategory={isDeletingCategory}
+							isEditingCategory={isEditingCategory}
+							openEditModal={openEditModal}
+							isModal={isModal}
+							setIsModal={setIsModal}
+						/>
+					</>
+				)}
+			</div>
 		</Box>
 	);
 };

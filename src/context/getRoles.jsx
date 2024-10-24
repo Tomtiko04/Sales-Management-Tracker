@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import supabase from "../services/supabase";
-import {PropTypes} from "prop-types"
+import {PropTypes} from "prop-types";
 
 export const RolesContext = createContext();
 
