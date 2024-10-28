@@ -9,10 +9,19 @@ import Empty from "../../../ui/Empty";
 import InputFieldSave from "../../../ui/InputFieldSave";
 import CategoryTable from "./CategoryTable";
 import SearchBar from "./CategorySearch";
+import Pagination from "../../../ui/Pagination";
 
 const CategoryManagement = () => {
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [searchTerm, setSearchTerm] = useState("");
+
 	const { addCategory, isAddingCategory } = useAddProductCategory();
-	const { getCategories, isGettingCategories } = useGetProductCategory();
+	const { getCategories, totalCategories, isGettingCategories } = useGetProductCategory(
+		page + 1,
+		rowsPerPage,
+		searchTerm
+	);
 	const { isDeleteCategoty, isDeletingCategory } = useDeleteCategory();
 	const { isEditCategory, isEditingCategory } = useEditCategory();
 	const { authUser } = useAuthUser();
@@ -22,14 +31,12 @@ const CategoryManagement = () => {
 	const userId = authUser?.id;
 	const companyName = authUser?.user_metadata.company_name;
 
-	//TODO Use context for these functions
-	
-	//Storing fetched categories
 	useEffect(() => {
-		setCategories(getCategories);
+		if (getCategories) {
+			setCategories(getCategories);
+		}
 	}, [getCategories]);
 
-	//Creating new Category
 	function addProductCategory() {
 		addCategory({
 			categoryName,
@@ -44,15 +51,26 @@ const CategoryManagement = () => {
 		addProductCategory();
 	};
 
-	//Edit category
 	function handleEdit(editId, categoryName) {
 		isEditCategory({ editId, categoryName });
 	}
 
-	//Delete category
 	function handleDelete(categoryId) {
 		isDeleteCategoty(categoryId);
 	}
+
+	const handlePageChange = (event, newPage) => {
+		setPage(newPage);
+	};
+
+	const handleRowsPerPageChange = (event) => {
+		setRowsPerPage(parseInt(event.target.value, 10));
+		setPage(0);
+	};
+
+	const handleSearch = () => {
+		setPage(0);
+	};
 
 	return (
 		<Box sx={{ maxWidth: "100%", margin: "auto", padding: 2 }}>
@@ -68,29 +86,32 @@ const CategoryManagement = () => {
 				isGettingCategories={isGettingCategories}
 			/>
 
-			{/* TODO search bar */}
-			<SearchBar />
-			{/* Connect the search */}
-
-			{/* TODO Pagination */}
+			<SearchBar
+				value={searchTerm}
+				onChange={(e) => setSearchTerm(e.target.value)}
+				onSearch={handleSearch}
+			/>
 
 			<div style={{ marginTop: "40px" }}>
-				{categories?.length == 0 ? (
-					<div>
-						<Empty emptyText="No category" />
-					</div>
+				{categories?.length === 0 ? (
+					<Empty emptyText="No category" />
 				) : (
-					<>
-						<CategoryTable
-							handleEdit={handleEdit}
-							handleDelete={handleDelete}
-							categories={categories}
-							isDeletingCategory={isDeletingCategory}
-							isEditingCategory={isEditingCategory}
-						/>
-					</>
+					<CategoryTable
+						handleEdit={handleEdit}
+						handleDelete={handleDelete}
+						categories={categories}
+						isDeletingCategory={isDeletingCategory}
+						isEditingCategory={isEditingCategory}
+					/>
 				)}
 			</div>
+			<Pagination
+				page={page}
+				rowsPerPage={rowsPerPage}
+				count={totalCategories}
+				onPageChange={handlePageChange}
+				onRowsPerPageChange={handleRowsPerPageChange}
+			/>
 		</Box>
 	);
 };
