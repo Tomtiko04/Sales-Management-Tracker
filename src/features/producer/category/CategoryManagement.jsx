@@ -18,7 +18,6 @@ const CategoryManagement = () => {
 	const { authUser } = useAuthUser();
 	const [categoryName, setCategoryName] = useState("");
 	const [categories, setCategories] = useState([]);
-	const [isModal, setIsModal] = useState(false);
 
 	const userId = authUser?.id;
 	const companyName = authUser?.user_metadata.company_name;
@@ -55,10 +54,6 @@ const CategoryManagement = () => {
 		isDeleteCategoty(categoryId);
 	}
 
-	function openEditModal(){
-		setIsModal(!isModal);
-	}
-
 	return (
 		<Box sx={{ maxWidth: "100%", margin: "auto", padding: 2 }}>
 			<div>
@@ -77,6 +72,8 @@ const CategoryManagement = () => {
 			<SearchBar />
 			{/* Connect the search */}
 
+			{/* TODO Pagination */}
+
 			<div style={{ marginTop: "40px" }}>
 				{categories?.length == 0 ? (
 					<div>
@@ -90,9 +87,6 @@ const CategoryManagement = () => {
 							categories={categories}
 							isDeletingCategory={isDeletingCategory}
 							isEditingCategory={isEditingCategory}
-							openEditModal={openEditModal}
-							isModal={isModal}
-							setIsModal={setIsModal}
 						/>
 					</>
 				)}

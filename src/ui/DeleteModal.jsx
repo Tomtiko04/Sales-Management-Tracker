@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import InputFieldSave from "./InputFieldSave";
-import { useState } from "react";
 
 const style = {
 	position: "absolute",
@@ -17,15 +15,9 @@ const style = {
 	p: 4,
 };
 
-export default function ModalPanel({ open, setIsOpen, defaultEdit, id, handleEdit }) {
+export default function DeleteModal({ open, setIsOpen, category_id, handleDelete }) {
 	const handleClose = () => setIsOpen(false);
-	const [editValue, setEditValue] = useState(defaultEdit);
-	function handleSubmit(e) {
-		e.preventDefault();
-		handleEdit(id, editValue);
-		handleClose();
-	}
-
+	
 	return (
 		<Modal
 			keepMounted
@@ -35,25 +27,21 @@ export default function ModalPanel({ open, setIsOpen, defaultEdit, id, handleEdi
 			aria-describedby="keep-mounted-modal-description">
 			<Box sx={style}>
 				<Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-					Edit Category
+					Delete Category
 				</Typography>
 				<Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-					<InputFieldSave
-						handleSubmit={handleSubmit}
-						categoryName={editValue}
-						setCategoryName={setEditValue}
-					/>
+					<p>Are you sure you want to be to delete this.</p>
 					<button onClick={() => handleClose()}>Close</button>
+					<button onClick={() => {handleDelete(category_id), handleClose()}}>Delete</button>
 				</Typography>
 			</Box>
 		</Modal>
 	);
 }
 
-ModalPanel.propTypes = {
+DeleteModal.propTypes = {
 	open: PropTypes.bool.isRequired,
 	setIsOpen: PropTypes.func.isRequired,
-	defaultEdit: PropTypes.string.isRequired,
-	id: PropTypes.number.isRequired,
-	handleEdit: PropTypes.func.isRequired,
+	handleDelete: PropTypes.func.isRequired,
+	category_id: PropTypes.number.isRequired
 };

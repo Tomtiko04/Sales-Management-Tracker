@@ -10,7 +10,9 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import ModalPanel from "../../../ui/ModalPanel";
+import DeleteModal from "../../../ui/DeleteModal";
 
 const CategoryTable = ({
 	categories,
@@ -19,10 +21,24 @@ const CategoryTable = ({
 	isDeletingCategory,
 	isEditingCategory,
 	isGettingCategories,
-	openEditModal,
-	isModal,
-	setIsModal,
 }) => {
+	const [editId, setEditId] = useState(null);
+	const [editName, setEditName] = useState("");
+	const [editModal, setEditModal] = useState(false);
+	const [deleteModal, setDeleteModal] = useState(false);
+	const [deleteId, setDeleteId] = useState(null);
+
+	function handleEditModal(id, editName){
+		setEditId(id);
+		setEditName(editName);
+		setEditModal(!editModal);
+	}
+
+	function handleDeleteModal(id) {
+		setDeleteId(id)
+		setDeleteModal(!deleteModal);
+	}
+
 	return (
 		<div>
 			<TableContainer sx={{ maxWidth: "100%", margin: "auto" }}>
@@ -46,7 +62,7 @@ const CategoryTable = ({
 										<IconButton
 											aria-label="edit"
 											onClick={() => {
-												handleEdit(category.id, category.category_name), openEditModal();
+												handleEditModal(category.id, category.category_name);
 											}}
 											disabled={isEditingCategory}
 											sx={{ color: "primary.main", mr: 1 }}>
@@ -54,7 +70,7 @@ const CategoryTable = ({
 										</IconButton>
 										<IconButton
 											aria-label="delete"
-											onClick={() => handleDelete(category.id)}
+											onClick={() => handleDeleteModal(category.id)}
 											disabled={isDeletingCategory}
 											sx={{ color: "error.main" }}>
 											<DeleteIcon />
@@ -66,7 +82,23 @@ const CategoryTable = ({
 					)}
 				</Table>
 			</TableContainer>
-			{isModal && <ModalPanel open={isModal} setIsOpen={setIsModal}/>}
+			{editModal && (
+				<ModalPanel
+					open={editModal}
+					setIsOpen={setEditModal}
+					defaultEdit={editName}
+					id={editId}
+					handleEdit={handleEdit}
+				/>
+			)}
+			{deleteModal && (
+				<DeleteModal
+					open={deleteModal}
+					setIsOpen={setDeleteModal}
+					handleDelete={handleDelete}
+					category_id={deleteId}
+				/>
+			)}
 		</div>
 	);
 };
@@ -78,9 +110,6 @@ CategoryTable.propTypes = {
 	isDeletingCategory: PropTypes.bool.isRequired,
 	isEditingCategory: PropTypes.bool.isRequired,
 	isGettingCategories: PropTypes.bool.any,
-	openEditModal: PropTypes.func.isRequired,
-	isModal: PropTypes.bool.isRequired,
-	setIsModal: PropTypes.func.isRequired,
 };
 
 export default CategoryTable;
