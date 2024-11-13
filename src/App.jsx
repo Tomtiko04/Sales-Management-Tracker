@@ -12,6 +12,7 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import RequestResetForm from "./features/authentication/RequestResetForm";
 import useAuthUser from "./hook/useAuthUser";
 import CategoryManagement from "./features/producer/category/CategoryManagement";
+import Product from "./features/producer/productCatalog/Product";
 
 export default function App() {
 	const { authUser } = useAuthUser();
@@ -49,6 +50,14 @@ export default function App() {
 							element={
 								<ProtectedRoute>
 									<CategoryManagement />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="product"
+							element={
+								<ProtectedRoute>
+									<Product />
 								</ProtectedRoute>
 							}
 						/>

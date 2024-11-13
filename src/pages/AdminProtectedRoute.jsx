@@ -21,5 +21,6 @@ export default function AdminProtectedRoute({ children, allowedRoles }) {
 
 AdminProtectedRoute.propTypes = {
 	children: PropTypes.node.isRequired,
-	allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+	// allowedRoles: PropTypes.arrayOf(PropTypes.string).isRequired,
+	allowedRoles: PropTypes.any
 };

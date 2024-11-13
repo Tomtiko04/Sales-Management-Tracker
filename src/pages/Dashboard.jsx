@@ -8,8 +8,11 @@ import SalesRepDashboard from "../features/dashboard/SalesRepDashboard";
 
 export default function Dashboard() {
 	const { authUser } = useAuthUser();
-	const isAuthenticated = authUser?.aud;
+	const isAuthenticated = authUser?.aud === "authenticated" ? true : false;
 	const role = authUser?.user_metadata?.role;
+
+	console.log("isAuthenticated:", isAuthenticated)
+	console.log("dashboard:", role);
 
 	return (
 		<>

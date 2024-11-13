@@ -7,7 +7,7 @@
 export default function ProducerDashboard() {
 	return (
 		<div>
-			{/* <h1>ProducerDashboard</h1> */}
+			<h1>ProducerDashboard</h1>
 			{/* <CategoryManagement /> */}
 			{/* <CreateProductForm />
 			<br />
