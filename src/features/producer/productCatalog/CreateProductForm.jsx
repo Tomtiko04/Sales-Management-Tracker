@@ -9,6 +9,7 @@ const CreateProductForm = () => {
 		category: "",
 		description: "",
 		productImage: null,
+		status: "Active",
 	});
 	const { getCategories, isGettingCategories } = useGetProductCategory();
 	const { isAddProduct, isAddingProduct } = useAddProduct();
@@ -17,6 +18,7 @@ const CreateProductForm = () => {
 	const [errors, setErrors] = useState({});
 
 	useEffect(() => {
+		if (!getCategories) return;
 		setCategories(getCategories);
 	}, [getCategories]);
 
@@ -40,6 +42,7 @@ const CreateProductForm = () => {
 
 		if (!formData.productName) newErrors.productName = "Product Name is required";
 		if (!formData.category) newErrors.category = "Category is required";
+		if (!formData.status) newErrors.status = "Product status is required";
 
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
@@ -55,6 +58,7 @@ const CreateProductForm = () => {
 			category: formData.category,
 			description: formData.description,
 			product_image: formData.productImage,
+			status: formData.status,
 		};
 
 		isAddProduct(productData, {
@@ -64,6 +68,7 @@ const CreateProductForm = () => {
 					category: "",
 					description: "",
 					productImage: null,
+					status: "",
 				});
 			},
 		});
@@ -101,6 +106,23 @@ const CreateProductForm = () => {
 					))}
 				</select>
 				{errors.category && <p style={{ color: "red" }}>{errors.category}</p>}
+			</div>
+
+			<div>
+				<label>Status</label>
+				<select
+					name="status"
+					value={formData.status}
+					onChange={handleInputChange}
+					required
+					disabled={isGettingCategories}>
+					<option disabled value="">
+						Select a status
+					</option>
+					<option value="Active">Active</option>
+					<option value="InActive">InActive</option>
+				</select>
+				{errors.status && <p style={{ color: "red" }}>{errors.status}</p>}
 			</div>
 
 			<div>
